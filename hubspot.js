@@ -32,9 +32,6 @@ if (scriptElement) {
       }
 }
 
-window.amplitude.track('hubspot.js loaded');
-amplitude.track("hubspot.js loaded");
-
 var hubspotutk = getCookie("hubspotutk");
 console.log("hubspotutk: ", hubspotutk);
 if (hubspotutk) {
