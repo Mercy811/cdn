@@ -23,7 +23,6 @@ if (scriptElement) {
     const apiKey = url.searchParams.get('apiKey');
     console.log('API Key:', apiKey);
     if (apiKey) {
-        console.log("apiKey: ", apiKey);
         // Load unified script with the apiKey
         const amplitudeScript = document.createElement("script");
         amplitudeScript.src = `https://cdn.amplitude.com/script/${apiKey}.js`;
@@ -32,6 +31,9 @@ if (scriptElement) {
         document.head.appendChild(amplitudeScript);
       }
 }
+
+window.amplitude.track('hubspot.js loaded');
+amplitude.track("hubspot.js loaded");
 
 var hubspotutk = getCookie("hubspotutk");
 console.log("hubspotutk: ", hubspotutk);
