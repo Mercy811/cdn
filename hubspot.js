@@ -16,20 +16,21 @@ const partnerIdEnrichmentPlugin = () => {
 };
 
 console.log("Starting HubSpot script");
-// Get the apiKey from the URL parameters
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
-const apiKey = urlParams.get("apiKey");
-console.log("apiKey: ", apiKey);
 
-if (apiKey) {
-  console.log("apiKey: ", apiKey);
-  // Load unified script with the apiKey
-  const amplitudeScript = document.createElement("script");
-  amplitudeScript.src = `https://cdn.amplitude.com/script/${apiKey}.js`;
-
-  // Append the script to the document
-  document.head.appendChild(amplitudeScript);
+const scriptElement = document.querySelector('script[src*="hubspot.js"]');
+if (scriptElement) {
+    const url = new URL(scriptElement.src);
+    const apiKey = url.searchParams.get('apiKey');
+    console.log('API Key:', apiKey);
+    if (apiKey) {
+        console.log("apiKey: ", apiKey);
+        // Load unified script with the apiKey
+        const amplitudeScript = document.createElement("script");
+        amplitudeScript.src = `https://cdn.amplitude.com/script/${apiKey}.js`;
+      
+        // Append the script to the document
+        document.head.appendChild(amplitudeScript);
+      }
 }
 
 var hubspotutk = getCookie("hubspotutk");
