@@ -28,19 +28,10 @@ if (scriptElement) {
         // Load unified script with the apiKey
         const amplitudeScript = document.createElement("script");
         amplitudeScript.src = `https://cdn.amplitude.com/script/${apiKey}.js`;
+        amplitudeScript.async = false;
       
         amplitudeScript.addEventListener("load", () => {
             console.log("Unified script loaded");
-
-            // Initialize Session Replay plugin with sample rate 1
-            window.amplitude.add(window.sessionReplay.plugin({ sampleRate: sampleRate }));
-            // Add partnerIdEnrichmentPlugin
-            window.amplitude.add(partnerIdEnrichmentPlugin());
-            // Initialize Amplitude with the provided options
-            window.amplitude.init(apiKey, {
-              fetchRemoteConfig: true,
-              autocapture: autocapture
-            });
 
             var hubspotutk = getCookie("hubspotutk");
             console.log("hubspotutk: ", hubspotutk);
