@@ -28,7 +28,7 @@ if (scriptElement) {
         // Load unified script with the apiKey
         const amplitudeScript = document.createElement("script");
         amplitudeScript.src = `https://cdn.amplitude.com/script/${apiKey}.js`;
-        amplitudeScript.async = false;
+        amplitudeScript.defer = true;
       
         amplitudeScript.addEventListener("load", () => {
             console.log("Unified script loaded");
