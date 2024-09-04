@@ -1,5 +1,3 @@
-console.log("Starting HubSpot script");
-
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -17,15 +15,47 @@ const partnerIdEnrichmentPlugin = () => {
   };
 };
 
-// Add partnerIdEnrichmentPlugin
-amplitude.add(partnerIdEnrichmentPlugin());
+console.log("Starting HubSpot script");
 
-var hubspotutk = getCookie("hubspotutk");
-console.log("hubspotutk: ", hubspotutk);
-if (hubspotutk) {
-    const identifyEvent = new amplitude.Identify();
-    identifyEvent.set("hubspotutk", hubspotutk);
-    amplitude.identify(identifyEvent);
+const scriptElement = document.querySelector('script[src*="hubspot.js"]');
+if (scriptElement) {
+    const url = new URL(scriptElement.src);
+    const apiKey = url.searchParams.get('apiKey');
+    const autocapture = url.searchParams.get('autocapture');
+    const sampleRate = url.searchParams.get('sampleRate');
+
+    if (apiKey) {
+        // Load unified script with the apiKey
+        const amplitudeScript = document.createElement("script");
+        amplitudeScript.src = `https://cdn.amplitude.com/script/${apiKey}.js`;
+      
+        amplitudeScript.addEventListener("load", () => {
+            console.log("Unified script loaded");
+
+            // Initialize Session Replay plugin with sample rate 1
+            window.amplitude.add(window.sessionReplay.plugin({ sampleRate: sampleRate }));
+            // Add partnerIdEnrichmentPlugin
+            window.amplitude.add(partnerIdEnrichmentPlugin());
+            // Initialize Amplitude with the provided options
+            window.amplitude.init(apiKey, {
+              fetchRemoteConfig: true,
+              autocapture: autocapture
+            });
+
+            var hubspotutk = getCookie("hubspotutk");
+            console.log("hubspotutk: ", hubspotutk);
+            if (hubspotutk) {
+                const identifyEvent = new amplitude.Identify();
+                identifyEvent.set("hubspotutk", hubspotutk);
+                amplitude.identify(identifyEvent);
+            }
+          });
+        
+        console.log("Appending unified script");
+        // Append the script to the document
+        document.head.appendChild(amplitudeScript);
+        console.log("Unified script appended");
+      }
 }
 
 console.log("HubSpot script loaded");
