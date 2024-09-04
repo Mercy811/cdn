@@ -20,6 +20,7 @@ amplitude.add(partnerIdEnrichmentPlugin());
 
 // Set hubspot cookie as a user property
 var hubspotutk = getCookie("hubspotutk");
+console.log("hubspotutk: ", hubspotutk);
 if (hubspotutk) {
     const identifyEvent = new amplitude.Identify();
     identifyEvent.set("hubspotutk", hubspotutk);
