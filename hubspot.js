@@ -1,5 +1,3 @@
-console.log("Starting HubSpot script");
-
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -20,6 +18,7 @@ const partnerIdEnrichmentPlugin = () => {
 // Add partnerIdEnrichmentPlugin
 amplitude.add(partnerIdEnrichmentPlugin());
 
+// Set hubspot cookie as a user property
 var hubspotutk = getCookie("hubspotutk");
 console.log("hubspotutk: ", hubspotutk);
 if (hubspotutk) {
@@ -28,4 +27,3 @@ if (hubspotutk) {
     amplitude.identify(identifyEvent);
 }
 
-console.log("HubSpot script loaded");
