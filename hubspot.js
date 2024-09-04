@@ -25,28 +25,32 @@ if (scriptElement) {
     const sampleRate = url.searchParams.get('sampleRate');
 
     if (apiKey) {
-        // Load unified script with the apiKey
-        const amplitudeScript = document.createElement("script");
-        amplitudeScript.src = `https://cdn.amplitude.com/script/${apiKey}.js`;
-        amplitudeScript.defer = true;
-      
-        amplitudeScript.addEventListener("load", () => {
-            console.log("Unified script loaded");
-
-            var hubspotutk = getCookie("hubspotutk");
-            console.log("hubspotutk: ", hubspotutk);
-            if (hubspotutk) {
-                const identifyEvent = new amplitude.Identify();
-                identifyEvent.set("hubspotutk", hubspotutk);
-                amplitude.identify(identifyEvent);
-            }
-          });
-        
-        console.log("Appending unified script");
-        // Append the script to the document
-        document.head.appendChild(amplitudeScript);
-        console.log("Unified script appended");
+      console.log("Fetching and executing Amplitude script synchronously");
+  
+      // Use XMLHttpRequest to fetch the script synchronously
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", `https://cdn.amplitude.com/script/${apiKey}.js`, false); // false makes it synchronous
+      xhr.send(null);
+  
+      if (xhr.status === 200) {
+        // Synchronously evaluate the script
+        eval(xhr.responseText);
+        console.log("Unified script loaded synchronously");
+  
+        var hubspotutk = getCookie("hubspotutk");
+        console.log("hubspotutk: ", hubspotutk);
+        if (hubspotutk) {
+          const identifyEvent = new amplitude.Identify();
+          identifyEvent.set("hubspotutk", hubspotutk);
+          amplitude.identify(identifyEvent);
+        }
+      } else {
+        console.error("Failed to load the Amplitude script");
       }
-}
-
-console.log("HubSpot script loaded");
+  
+      console.log("Unified script fetched and executed synchronously");
+    }
+  }
+  
+  console.log("HubSpot script loaded");
+  
